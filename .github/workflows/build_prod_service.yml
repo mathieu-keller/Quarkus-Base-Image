@@ -29,7 +29,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Build
-      run: docker build . ${{ secrets.DOCKER_USER }}/quarkus-base-image:${{ steps.semantic.outputs.release-version  }}
+      run: docker build . -t ${{ secrets.DOCKER_USER }}/quarkus-base-image:${{ steps.semantic.outputs.release-version  }}
+    - name: push
+      run: docker push ${{ secrets.DOCKER_USER }}/quarkus-base-image:${{ steps.semantic.outputs.release-version  }}
     - name: Semantic Release Action
       uses: codfish/semantic-release-action@v2
       with:
