@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.7-1031@sha256:96a76fa48db5fca24271fe1565d88a4453e759b365dbaaeeb5a4e41049293e77 as BUILD
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.7-1049@sha256:c7036d048252451451bfc70493c2a849737e91c5517559ec508a0dbe7dfb6d15 as BUILD
 RUN microdnf install freetype fontconfig
 
 # Second stage - copy the dependencies
