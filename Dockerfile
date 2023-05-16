@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.7-1107@sha256:3e1adcc31c6073d010b8043b070bd089d7bf37ee2c397c110211a6273453433f as BUILD
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.8-860@sha256:82d08fba0a8322ff0c39934efe6972ccbf152dfb4639fb7a5765192f674e3eaa as BUILD
 RUN microdnf install freetype
 
 # Second stage - copy the dependencies
