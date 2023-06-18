@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi8/ubi-minimal:8.8-860@sha256:82d08fba0a8322ff
 RUN microdnf install freetype
 
 # Second stage - copy the dependencies
-FROM quay.io/quarkus/quarkus-micro-image:2.0@sha256:81b5c49ecea667cc8e48e8e945bb1e6a674167f6c4299fe1f069f7f8e4f6097a
+FROM quay.io/quarkus/quarkus-micro-image:2.0@sha256:dcff5f96874b47ab3148fedbf9afa7bb32127723daa29b1d135174ae4f28f089
 COPY --from=BUILD \
    /lib64/libfreetype.so.6 \
    /lib64/libbz2.so.1 \
