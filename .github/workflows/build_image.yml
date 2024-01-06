@@ -9,32 +9,32 @@ on:
 jobs:
   dry-release:
     name: dry release
-    uses: mathieu-keller/github-action-workflows/.github/workflows/semantic-release.yaml@1.0.1
+    uses: mathieu-keller/github-action-workflows/.github/workflows/semantic-release.yaml@2.0.0
     with:
       release-branch: main
       dry: true
   build-image:
     name: build Image
     needs: [ dry-release ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Login to Docker Hub
-      uses: docker/login-action@v2
+      uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_TOKEN }}
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
+      uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
     - name: Build & Push Docker image
       run: docker buildx build -t ${{ secrets.DOCKER_USER }}/quarkus-base-image:${{ needs.dry-release.outputs.new_version }} -f ./Dockerfile --push --platform=linux/arm64,linux/amd64 .
   release:
     name: create release
     needs: [ build-image ]
     if: ${{ github.ref == 'refs/heads/main' }}
-    uses: mathieu-keller/github-action-workflows/.github/workflows/semantic-release.yaml@1.0.1
+    uses: mathieu-keller/github-action-workflows/.github/workflows/semantic-release.yaml@2.0.0
     with:
       release-branch: main
       dry: false
