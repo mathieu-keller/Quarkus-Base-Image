@@ -30,6 +30,30 @@ jobs:
       uses: docker/setup-buildx-action@v3
     - name: Build & Push Docker image
       run: docker buildx build -t ${{ secrets.DOCKER_USER }}/quarkus-base-image:${{ needs.dry-release.outputs.new_version }} -f ./Dockerfile --push --platform=linux/arm64,linux/amd64 .
+  approve:
+    name: approve
+    runs-on: ubuntu-22.04
+    needs: [ build-image ]
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login == 'renovate[bot]' }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Approve PR
+        run: gh pr review ${{ github.event.number }} -a
+  merge:
+    name: merge
+    runs-on: ubuntu-22.04
+    needs: [ approve ]
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login == 'renovate[bot]' }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Merge PR
+        run: gh pr merge ${{ github.event.number }}
   release:
     name: create release
     needs: [ build-image ]
